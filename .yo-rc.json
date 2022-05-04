@@ -1,0 +1,16 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "version": "1.14.0",
+    "libraryName": "maps-dexa-2022",
+    "libraryId": "6ab65db4-8002-4f41-90b5-7be0a6c7a7f4",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "MapsDexa2022",
+    "solutionShortDescription": "MapsDexa2022 description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}

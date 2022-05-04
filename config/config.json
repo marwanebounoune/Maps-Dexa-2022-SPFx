@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "maps-dexa-2022-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/mapsDexa2022/MapsDexa2022WebPart.js",
+          "manifest": "./src/webparts/mapsDexa2022/MapsDexa2022WebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "MapsDexa2022WebPartStrings": "lib/webparts/mapsDexa2022/loc/{locale}.js"
+  }
+}

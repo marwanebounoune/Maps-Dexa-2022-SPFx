@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "maps-dexa-2022-client-side-solution",
+    "id": "6ab65db4-8002-4f41-90b5-7be0a6c7a7f4",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.14.0"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "MapsDexa2022 description"
+      },
+      "longDescription": {
+        "default": "MapsDexa2022 description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "maps-dexa-2022 Feature",
+        "description": "The feature that activates elements of the maps-dexa-2022 solution.",
+        "id": "a5a92a27-943f-4701-9081-cd76b5bc3888",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/maps-dexa-2022.sppkg"
+  }
+}
