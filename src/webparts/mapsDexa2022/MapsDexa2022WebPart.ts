@@ -5,7 +5,7 @@ import {
   IPropertyPaneConfiguration,
   PropertyPaneTextField
 } from '@microsoft/sp-property-pane';
-import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
+import { BaseClientSideWebPart, WebPartContext } from '@microsoft/sp-webpart-base';
 import { IReadonlyTheme } from '@microsoft/sp-component-base';
 
 import * as strings from 'MapsDexa2022WebPartStrings';
@@ -14,9 +14,13 @@ import { IMapsDexa2022Props } from './components/IMapsDexa2022Props';
 
 export interface IMapsDexa2022WebPartProps {
   description: string;
+  ctx: WebPartContext;
 }
 
 export default class MapsDexa2022WebPart extends BaseClientSideWebPart<IMapsDexa2022WebPartProps> {
+  protected get disableReactivePropertyChanges(): boolean {
+    return true;
+  }
 
   private _isDarkTheme: boolean = false;
   private _environmentMessage: string = '';
@@ -32,13 +36,9 @@ export default class MapsDexa2022WebPart extends BaseClientSideWebPart<IMapsDexa
       MapsDexa2022,
       {
         description: this.properties.description,
-        isDarkTheme: this._isDarkTheme,
-        environmentMessage: this._environmentMessage,
-        hasTeamsContext: !!this.context.sdks.microsoftTeams,
-        userDisplayName: this.context.pageContext.user.displayName
+        ctx: this.context,
       }
     );
-
     ReactDom.render(element, this.domElement);
   }
 
@@ -48,21 +48,6 @@ export default class MapsDexa2022WebPart extends BaseClientSideWebPart<IMapsDexa
     }
 
     return this.context.isServedFromLocalhost ? strings.AppLocalEnvironmentSharePoint : strings.AppSharePointEnvironment;
-  }
-
-  protected onThemeChanged(currentTheme: IReadonlyTheme | undefined): void {
-    if (!currentTheme) {
-      return;
-    }
-
-    this._isDarkTheme = !!currentTheme.isInverted;
-    const {
-      semanticColors
-    } = currentTheme;
-    this.domElement.style.setProperty('--bodyText', semanticColors.bodyText);
-    this.domElement.style.setProperty('--link', semanticColors.link);
-    this.domElement.style.setProperty('--linkHovered', semanticColors.linkHovered);
-
   }
 
   protected onDispose(): void {
@@ -93,5 +78,8 @@ export default class MapsDexa2022WebPart extends BaseClientSideWebPart<IMapsDexa
         }
       ]
     };
+  }
+  protected onPropertyPaneConfigurationComplete() {
+    window.location.href = window.location.href
   }
 }

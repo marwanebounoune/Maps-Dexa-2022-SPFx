@@ -1,0 +1,45 @@
+import styles from '../MapsDexa2022.module.scss';
+import "@pnp/sp/folders";
+import * as React from 'react';
+import { Stack } from 'office-ui-fabric-react';
+import { sp } from '../../Constants';
+import "@pnp/sp/webs";
+import "@pnp/sp/site-groups/web";
+import "@pnp/sp/lists";
+import "@pnp/sp/security/list";
+import "@pnp/sp/site-users/web";
+
+export interface IValiderProps {
+  idRef: number;
+  buttonTitle: string;
+  ctx: any;
+}
+
+export default function ValiderRef (props:IValiderProps){
+  async function valider(){
+    let user = await sp.web.currentUser();
+    var _date = new Date().toISOString();
+    let itemAvantValid = await sp.web.lists.getByTitle("Comparables").items.getById(props.idRef)()
+    console.log("itemAvantValid", itemAvantValid)
+    await (await sp.web.lists.ensure("Comparables")).list.items.getById(props.idRef).breakRoleInheritance(false);
+    const { Id: roleDefId1 } = await sp.web.roleDefinitions.getByName("Collaboration")();
+    const { Id: roleDefId2 } = await sp.web.roleDefinitions.getByName("Après validation des références")();
+    const groups1 = await sp.web.siteGroups.getByName("Direction")();
+    const groups2 = await sp.web.siteGroups.getByName("Elaborateur_visiteur")();
+    await itemAvantValid.roleAssignments.add(groups1.Id, roleDefId1);
+    await itemAvantValid.roleAssignments.add(groups2.Id, roleDefId2);
+    await sp.web.lists.getByTitle("Comparables").items.getById(props.idRef).update({
+      validateur_refId: user.Id,
+      date_x0020_de_x0020_validation: _date
+    });
+  }
+  return (
+    <div>
+      <Stack horizontal horizontalAlign="start"> 
+        <a className={styles.Pointer} onClick={() => valider()}>{props.buttonTitle}</a>
+      </Stack>
+    </div>
+  );
+    
+}
+
