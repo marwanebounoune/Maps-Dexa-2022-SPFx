@@ -29,7 +29,6 @@ export default function MapContainer(props:IMapContainerProps){
   let [lng, setLng]= React.useState(null);
   let [maps, setMaps]= React.useState(null);
   let [map, setMap]= React.useState(null);
-  let [dexa_markers, setDexa_markers]= React.useState(null);;
   let [result, SetResult]= React.useState(null);
   let [popupInfo, setPopupInfo]= React.useState(null);
   let [popupInfoRapport, setPopupInfoRapport]= React.useState(null);
@@ -39,6 +38,7 @@ export default function MapContainer(props:IMapContainerProps){
   let [typeDeBien, setTypeDeBien] = React.useState("");
   let [rapportClassicMarkers, setRapportClassicMarkers]= React.useState(null);
   let [grandRapportMarkers, setGrandRapportMarkers]= React.useState(null);
+  let [dexa_markers, setDexa_markers]= React.useState(null);
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   const FiltrageDialogContentProps = {
     type: DialogType.largeHeader,
@@ -128,14 +128,13 @@ export default function MapContainer(props:IMapContainerProps){
     return <div className={styles.popupMarker}>
       <div className={styles.CloseDiv} onClick={()=> setPopupInfoRapport(false)}>X</div>
       <div className={styles.arrowPopUp}></div>
-      <span className={styles.spanInfo}>Nom: </span>{popupInfoRapport.FileLeafRef} 
-      <br/>
-      <div>
-        {/* <span className={styles.spanInfo}>Type de bien:</span>{popupInfoRapport.Type_x0020_de_x0020_bien[0]} */}
+      {console.log("popupInfoRapport", popupInfoRapport)}
+      <span className={styles.spanInfo}>Type de bien: </span>{popupInfoRapport.Type_x0020_de_x0020_bien}<br/>
+      {popupInfoRapport.Surface_x0020_pond_x00e9_r_x00e9?<><span className={styles.spanInfo}>Surface pondéré: </span>{popupInfoRapport.Surface_x0020_pond_x00e9_r_x00e9} Dhs/m2<br/></>:<></>}
+      {popupInfoRapport.Surface_x0020_construite?<><span className={styles.spanInfo}>Surface construite: </span>{popupInfoRapport.Surface_x0020_construite} Dhs/m2<br/></>:<></>}
+      {popupInfoRapport.Surface_x0020_terrain?<><span className={styles.spanInfo}>Surface terrain: </span>{popupInfoRapport.Surface_x0020_terrain} Dhs/m2<br/></>:<></>}
+      <span className={styles.spanInfo}>Prix total de l'expertise: </span>{popupInfoRapport.Prix_x0020_total_x0020_de_x0020_} Dhs
       </div>
-      <br/>      
-      <a className={styles.rightFloat} href="#" onClick={(event)=> {event.preventDefault(); WindowPopUp("get info", getAbsoluteRapportUrl(popupInfoRapport.EncodedAbsUrl, popupInfoRapport.FileLeafRef), "");}}>Voir Plus</a>
-    </div>
   };
   const PopupRightOrganisme = ({ lat, lng , modaleTitle}) => {
     return <div className={styles.popupRight}>
@@ -220,6 +219,7 @@ export default function MapContainer(props:IMapContainerProps){
     setPopupInfo(null);
     setPopupInfoRapport(null);
     setTypeDeBien(type_de_bien);
+    setRapportClassicMarkers(null);
     await setDexa_markers(item_dexa);
     setUpdatedMarker(true);
     var result = {
@@ -232,6 +232,7 @@ export default function MapContainer(props:IMapContainerProps){
     setPopOut(true);
   }
   async function displayAllMarker (item_dexa:any) {
+    setRapportClassicMarkers(null);
     await setDexa_markers(item_dexa);
     setUpdatedMarker(true);
     var result = {
@@ -242,6 +243,7 @@ export default function MapContainer(props:IMapContainerProps){
   async function displayRapport (rapport_classic:any, grand_rapport:any) {
     setPopupInfo(null);
     setPopupInfoRapport(null);
+    setDexa_markers(null)
     await setRapportClassicMarkers(rapport_classic);
     await setGrandRapportMarkers(grand_rapport);
     setUpdatedMarker(true);

@@ -23,16 +23,12 @@ export default function FiltrerWithUser (props:IFiltrerWithUserProps){
   let [alertAutorisation, setAlertAutorisation] = React.useState(false);
   let [isOpen, setIsOpen] = React.useState(false);
   async function _getPeoplePickerItems(items: any[]) {
-    console.log('Items:', items[0]);
     var userId = await (await getUser(items[0].secondaryText)).data.Id;
-    console.log("userId -> ", userId)
     var query = function(element) {
       return element.AuthorId === userId;
     };
     const Refs:any = await sp.web.lists.getByTitle("Comparables").items.getAll();
-    console.log("Refs -> ", Refs)
     const refs = Refs.filter(query);
-    console.log("refs -> ", refs)
     props.handleFilterWhithUser(refs);
   }
   return (<div>

@@ -100,12 +100,10 @@ export default function FiltrerRapport (props:IFiltrerRapportProps){
           return elm.Ttype_x0020_de_x0020_rapport === element;
       };
       await sp.web.lists.getByTitle("EvalRapports").items.getAll().then(async res=>{
-        console.log("res => ", res)
-        console.log("res => ", res)
         if(element === "Rapports 2022"){
           rapport_classic = await res.filter(query);
         }
-        if(element === "Grands Projets 2022"){
+        else if(element === "Grands Projets 2022"){
           grand_rapport= await res.filter(query);
         }
         if (form.type_rapport.length-1 === index){
