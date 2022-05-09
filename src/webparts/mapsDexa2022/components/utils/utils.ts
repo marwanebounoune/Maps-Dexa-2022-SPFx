@@ -111,10 +111,12 @@ export function extendDistanceFiltrer(itemsDexa:any, start_point:any, start_dis:
             latitude: lat,
             longitude: lng
         };
+        console.log("element =>",element)
         var dis = haversine(start_point, end_point);
         var date = new Date(element.Date_x0020_de_x0020_la_x0020_r_x).getFullYear().toString()
-        return element.Type_x0020_de_x0020_bien === type_de_bien && type_de_ref.indexOf(element.Type_x0020_de_x0020_R_x00e9_f_x0)!=-1 && date_de_ref.indexOf(date)!=-1 && dis <= start_dis/1000;
+        return element.is_deleted ==="Non" && element.Type_x0020_de_x0020_bien === type_de_bien && type_de_ref.indexOf(element.Type_x0020_de_x0020_R_x00e9_f_x0)!=-1 && date_de_ref.indexOf(date)!=-1 && dis <= start_dis/1000;
     };
+    
     const filterd_list_dexa = itemsDexa.filter(query);
     if (start_dis === end_dis || filterd_list_dexa.length > 10){
         return {

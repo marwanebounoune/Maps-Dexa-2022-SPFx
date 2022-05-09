@@ -27,7 +27,6 @@ export interface ISuppProps {
         console.log("user connected =>", user)
         var query = function(element) {
             return element.membre_refId === user.Id;
-            
         };
         await sp.web.lists.getByTitle("l_validateurs").items.getAll().then(async (res)=>{
             console.log("res", res)
@@ -56,5 +55,4 @@ export interface ISuppProps {
         </Stack>}
         </div>
     );
-        
     }
