@@ -72,10 +72,6 @@ export default function PopOut (props:IPopOutProps) {
             <td >{numStr(Prix_unitaire_max(prix_unit) - Prix_unitaire_min(prix_unit), "")},00 Dhs/m2</td>
           </tr>
           <tr>
-            <td ><b>Ecart type de l'échantillon</b></td>
-            <td >{numStr(EcartType(prix_unit), "")},00 Dhs/m2</td>
-          </tr>
-          <tr>
             <td ><b>Zone DGI</b></td>
             <td >{props.evaluation.dgi_zone.Title}</td>
           </tr>

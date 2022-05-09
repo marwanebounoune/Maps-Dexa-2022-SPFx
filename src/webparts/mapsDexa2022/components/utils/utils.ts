@@ -41,7 +41,7 @@ export async function WindowPopUp(modalTitle:string, url:string, from_list:strin
             url_page = "https://agroupma.sharepoint.com/:u:/s/DEXA2022/EeHkEXWh9lNKr_t2npJ5SJEBIRBL6OhvBn6BKfxB8CFcNA?e=7bfopv";
         }
         else{
-            if(email != "alami.saad@agroup.ma" && email != "valactif.dev@agroup.ma" && email != "alami.mohamed@agroup.ma" && credit){
+            if(email != "alami.saad@agroup.ma" && email != "valactif.deev@agroup.ma" && email != "alami.mohamed@agroup.ma" && credit){
                 await sp.web.lists.getByTitle("l_credits").items.getById(credit[0].Id).update({
                     Cr_x00e9_dit_x0020_journalier: credit[0].Cr_x00e9_dit_x0020_journalier-1,
                     Cr_x00e9_dit_x0020_mensuel: credit[0].Cr_x00e9_dit_x0020_mensuel-1

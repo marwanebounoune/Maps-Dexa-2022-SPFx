@@ -14,6 +14,8 @@ import FiltrerWithUser from "./utils/FiltrerWithUser";
 import styles from './MapsDexa2022.module.scss';
 import PopOutFilter from './fabric-ui/PopOutFilter';
 import ValiderRef from "./utils/ValiderRef";
+import EditerRef from "./utils/EditerRef";
+import SuppRef from "./utils/SuppRef";
 
 interface IMapContainerProps {
   GoogleKey:string;
@@ -120,8 +122,10 @@ export default function MapContainer(props:IMapContainerProps){
       {popupInfo.Surface_x0020_pond_x00e9_r_x00e9?<div><span className={styles.spanInfo}>Surface Pondéré:</span><span>{popupInfo.Surface_x0020_pond_x00e9_r_x00e9} m²</span></div>:<></>}
       <br/>
       <ValiderRef idRef={popupInfo.Id} buttonTitle="Valider la référence" ctx={props.context}></ValiderRef>
+      <EditerRef  idRef={popupInfo.Id} buttonTitle="Editer la référence" ctx={props.context} ></EditerRef>
+      <SuppRef idRef ={popupInfo.Id} buttonTitle="Supprimer la référence" ctx={props.context}></SuppRef>
       {console.log("popupInfo.Id: ", popupInfo.Id)}
-      <a className={styles.rightFloat} href="#" onClick={(event)=> {event.preventDefault();WindowPopUp('', 'https://agroupma.sharepoint.com/sites/DEXA2022/Lists/l_dexa/DispForm.aspx?ID='+popupInfo.Id, 'l_dexa');}}>Voir plus...</a>
+      <a className={styles.rightFloat} href="#" onClick={(event)=> {event.preventDefault();WindowPopUp('', 'https://agroupma.sharepoint.com/sites/DEXA2022/Lists/l_dexa/DispForm.aspx?ID='+popupInfo.Id, 'Comparables');}}>Voir plus...</a>
     </div>
   };
   const PopupRapport = ({ lat, lng}) => {
