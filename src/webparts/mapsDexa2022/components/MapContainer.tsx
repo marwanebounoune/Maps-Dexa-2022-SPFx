@@ -16,7 +16,6 @@ import PopOutFilter from './fabric-ui/PopOutFilter';
 import ValiderRef from "./utils/ValiderRef";
 import EditerRef from "./utils/EditerRef";
 import SuppRef from "./utils/SuppRef";
-import { DialogCredit } from "./fabric-ui/DialogCredit";
 
 interface IMapContainerProps {
   GoogleKey:string;
@@ -310,7 +309,6 @@ export default function MapContainer(props:IMapContainerProps){
         {popupInfoRapport ? <PopupRapport lat={getLat(popupInfoRapport.Latitude_Longitude)} lng={getLng(popupInfoRapport.Latitude_Longitude)}/>:<></>}
         {popupInfo ? <Popup lat={getLat(popupInfo.Latitude_Longitude)} lng={getLng(popupInfo.Latitude_Longitude)}/>:<></>}
         {rightClickMap ? <PopupRightOrganisme lat={lat} lng={lng} modaleTitle={"Ajouter Réference"}/>:<></>}
-        {windowPopUp === 0 ? <DialogCredit/> : <></>}
       </GoogleMapReact>
     </div>
   );
