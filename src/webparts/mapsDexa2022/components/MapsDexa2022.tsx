@@ -14,7 +14,6 @@ export default class MapsDexa2022 extends React.Component<IMapsDexa2022Props, {}
   public render(): React.ReactElement<IMapsDexa2022Props> {
     return (
       <div className={ styles.mapsDexa2022 }>
-        {console.log("this.props.ctx", this.props)}
         <div className={ styles.container }>
           <div className={ styles.row }>
             <MapContainer context={this.props.ctx} GoogleKey={this.props.description}/>

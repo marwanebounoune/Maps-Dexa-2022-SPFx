@@ -6,7 +6,7 @@ import { ActionButton, Dialog, DialogType, Stack } from 'office-ui-fabric-react'
 import * as React from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { sp } from '../Constants';
-import { getAbsoluteRapportUrl, getLat, getLng, isPointInPolygon, WindowPopUp } from './utils/utils';
+import { getLat, getLng, isPointInPolygon, WindowPopUp } from './utils/utils';
 import Evaluer from './utils/Evaluer';
 import Filtrer from './utils/Filtrer';
 import FiltrerRapport from './utils/FiltrerRapport';
@@ -41,6 +41,8 @@ export default function MapContainer(props:IMapContainerProps){
   let [rapportClassicMarkers, setRapportClassicMarkers]= React.useState(null);
   let [grandRapportMarkers, setGrandRapportMarkers]= React.useState(null);
   let [dexa_markers, setDexa_markers]= React.useState(null);
+  let [ifValidateur, setIfValidateur]= React.useState(null);
+  let [isValid, setIsValid]= React.useState(null);
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   const FiltrageDialogContentProps = {
     type: DialogType.largeHeader,
@@ -60,7 +62,6 @@ export default function MapContainer(props:IMapContainerProps){
     disableDefaultUI: false,
   };
   const handleApiLoaded = (map, maps) => {
-    console.log("Props.context", props.context)
     setMaps(maps);
     setMap(map);
     maps.event.addListener(map, "rightclick", async function(event) {
@@ -111,6 +112,7 @@ export default function MapContainer(props:IMapContainerProps){
     </div>
   };
   const Popup = ({ lat, lng}) => {
+    getIfValid();
     return  <div className={styles.popupMarker}>
       <div className={styles.CloseDiv} onClick={()=> setPopupInfo(false)}>X</div>
       <div className={styles.arrowPopUp}></div>
@@ -121,10 +123,9 @@ export default function MapContainer(props:IMapContainerProps){
       {popupInfo.Surface_x0020_construite?<div><span className={styles.spanInfo}>Surface Construite:</span><span>{popupInfo.Surface_x0020_construite} m²</span></div>:<></>}
       {popupInfo.Surface_x0020_pond_x00e9_r_x00e9?<div><span className={styles.spanInfo}>Surface Pondéré:</span><span>{popupInfo.Surface_x0020_pond_x00e9_r_x00e9} m²</span></div>:<></>}
       <br/>
-      <ValiderRef idRef={popupInfo.Id} buttonTitle="Valider la référence" ctx={props.context}></ValiderRef>
-      <EditerRef  idRef={popupInfo.Id} buttonTitle="Editer la référence" ctx={props.context} ></EditerRef>
-      <SuppRef idRef ={popupInfo.Id} buttonTitle="Supprimer la référence" ctx={props.context}></SuppRef>
-      {console.log("popupInfo.Id: ", popupInfo.Id)}
+      {ifValidateur?<ValiderRef idRef={popupInfo.Id} buttonTitle="Valider la référence" ctx={props.context}></ValiderRef>:<></>}
+      {isValid?<EditerRef  idRef={popupInfo.Id} buttonTitle="Editer la référence" ctx={props.context} ></EditerRef>:<></>}
+      {isValid?<SuppRef idRef ={popupInfo.Id} buttonTitle="Supprimer la référence" ctx={props.context}></SuppRef>:<></>}
       <a className={styles.rightFloat} href="#" onClick={(event)=> {event.preventDefault();WindowPopUp('', 'https://agroupma.sharepoint.com/sites/DEXA2022/Lists/l_dexa/DispForm.aspx?ID='+popupInfo.Id, 'Comparables');}}>Voir plus...</a>
     </div>
   };
@@ -132,7 +133,6 @@ export default function MapContainer(props:IMapContainerProps){
     return <div className={styles.popupMarker}>
       <div className={styles.CloseDiv} onClick={()=> setPopupInfoRapport(false)}>X</div>
       <div className={styles.arrowPopUp}></div>
-      {console.log("popupInfoRapport", popupInfoRapport)}
       <span className={styles.spanInfo}>Type de bien: </span>{popupInfoRapport.Type_x0020_de_x0020_bien}<br/>
       {popupInfoRapport.Surface_x0020_pond_x00e9_r_x00e9?<><span className={styles.spanInfo}>Surface pondéré: </span>{popupInfoRapport.Surface_x0020_pond_x00e9_r_x00e9} Dhs/m2<br/></>:<></>}
       {popupInfoRapport.Surface_x0020_construite?<><span className={styles.spanInfo}>Surface construite: </span>{popupInfoRapport.Surface_x0020_construite} Dhs/m2<br/></>:<></>}
@@ -190,6 +190,29 @@ export default function MapContainer(props:IMapContainerProps){
     return inputSearch;
   };
   ///////////////////////////////////////////////////////////////////////////////////////////////////
+  async function getIfValid(){
+    var query = function(element) {
+      return element.ID === popupInfo.ID;
+    };
+    var comparables = await sp.web.lists.getByTitle("Comparables").items.getAll();
+    var comparable = await comparables.filter(query)
+    if(comparable[0].validateur_refId !== null)
+      setIsValid(comparable);
+    else
+      setIsValid(null)
+  }
+  async function getInfoUser(){
+    let user = await sp.web.currentUser();
+    var query = function(element) {
+      return element.membre_refId === user.Id;
+    };
+    var validateurs = await sp.web.lists.getByTitle("l_validateurs").items.getAll();
+    var userConnected = await validateurs.filter(query)
+    if(userConnected.length != 0)
+      setIfValidateur(userConnected)
+    else
+      setIfValidateur(null)
+  }
   async function getDGI(lat,lng){
     var query = function(element) {
       return isPointInPolygon(lat, lng, element.Polygone);
@@ -252,6 +275,11 @@ export default function MapContainer(props:IMapContainerProps){
     await setGrandRapportMarkers(grand_rapport);
     setUpdatedMarker(true);
   }
+
+  React.useEffect(() => {
+      getInfoUser();
+  },[]);
+
   return (
     <div className={styles.googleMapReact}>
       {popOut?

@@ -9,7 +9,7 @@ export default function PopOutFilter (props:IPopOutFilter) {
   let prix_unit:any = Get_all_Prix_unit();
   
   function Get_all_Prix_unit(){
-    console.log("Information filtage =>", props.Information)
+    //console.log("Information filtage =>", props.Information)
     let prix_unit:any = [];
     var p_int:number = null;
     props.Information.ref_dexa.forEach(element => {

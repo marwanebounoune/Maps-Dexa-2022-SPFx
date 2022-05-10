@@ -19,7 +19,7 @@ export function getLng(latlng:string){
 }
 export async function getUser(email: string) {
     let user = await sp.web.ensureUser(email);
-    console.log("User", user)
+    //console.log("User", user)
     return user;
 }
 export async function WindowPopUp(modalTitle:string, url:string, from_list:string){
@@ -111,7 +111,7 @@ export function extendDistanceFiltrer(itemsDexa:any, start_point:any, start_dis:
             latitude: lat,
             longitude: lng
         };
-        console.log("element =>",element)
+        //console.log("element =>",element)
         var dis = haversine(start_point, end_point);
         var date = new Date(element.Date_x0020_de_x0020_la_x0020_r_x).getFullYear().toString()
         return element.is_deleted ==="Non" && element.Type_x0020_de_x0020_bien === type_de_bien && type_de_ref.indexOf(element.Type_x0020_de_x0020_R_x00e9_f_x0)!=-1 && date_de_ref.indexOf(date)!=-1 && dis <= start_dis/1000;
@@ -162,7 +162,7 @@ export function extendDistanceFiltrerRapport(rapport_classic:any,grand_rapport:a
 }
 export async function get_dgi_zone(lat:number, lng:number) {
     await sp.web.lists.getByTitle("l_ref_DGI").items.getAll().then(res=>{
-        console.log("res DGI => ", res)
+        //console.log("res DGI => ", res)
         var query = function(element) {
             return isPointInPolygon(lat, lng, element.Polygone);
         };
@@ -229,3 +229,5 @@ export function numStr(a, b) {
     }
     return c;
 }
+
+

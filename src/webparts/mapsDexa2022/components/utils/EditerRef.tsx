@@ -26,12 +26,12 @@ export default function EditerRef (props:IValiderProps){
     async function user(){
         let user = await sp.web.currentUser();
         var userConnected:any = null
-        console.log("user connected =>", user)
+        //console.log("user connected =>", user)
         var query = function(element) {
             return element.membre_refId === user.Id;
         };
         await sp.web.lists.getByTitle("l_validateurs").items.getAll().then(async (res)=>{
-          console.log("res", res)
+          //console.log("res", res)
           userConnected = res.filter(query)
           if(userConnected)
             await setUserConn(userConn)
@@ -39,7 +39,7 @@ export default function EditerRef (props:IValiderProps){
             await setUserConn(null)
         })
       }
-      console.log("userConn", userConn);
+      //console.log("userConn", userConn);
 
       return (
         <div>{userConn?<></>:
