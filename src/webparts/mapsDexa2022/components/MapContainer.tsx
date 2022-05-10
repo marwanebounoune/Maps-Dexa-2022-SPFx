@@ -16,6 +16,7 @@ import PopOutFilter from './fabric-ui/PopOutFilter';
 import ValiderRef from "./utils/ValiderRef";
 import EditerRef from "./utils/EditerRef";
 import SuppRef from "./utils/SuppRef";
+import { DialogCredit } from "./fabric-ui/DialogCredit";
 
 interface IMapContainerProps {
   GoogleKey:string;
@@ -41,8 +42,9 @@ export default function MapContainer(props:IMapContainerProps){
   let [rapportClassicMarkers, setRapportClassicMarkers]= React.useState(null);
   let [grandRapportMarkers, setGrandRapportMarkers]= React.useState(null);
   let [dexa_markers, setDexa_markers]= React.useState(null);
-  let [ifValidateur, setIfValidateur]= React.useState(null);
-  let [isValid, setIsValid]= React.useState(null);
+  let [isValidateur, setIsValidateur]= React.useState(null);
+  let [isNotValid, setIsNotValid]= React.useState(null);
+  let [windowPopUp, setWindowPopUp]= React.useState(null);
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   const FiltrageDialogContentProps = {
     type: DialogType.largeHeader,
@@ -123,10 +125,13 @@ export default function MapContainer(props:IMapContainerProps){
       {popupInfo.Surface_x0020_construite?<div><span className={styles.spanInfo}>Surface Construite:</span><span>{popupInfo.Surface_x0020_construite} m²</span></div>:<></>}
       {popupInfo.Surface_x0020_pond_x00e9_r_x00e9?<div><span className={styles.spanInfo}>Surface Pondéré:</span><span>{popupInfo.Surface_x0020_pond_x00e9_r_x00e9} m²</span></div>:<></>}
       <br/>
-      {ifValidateur?<ValiderRef idRef={popupInfo.Id} buttonTitle="Valider la référence" ctx={props.context}></ValiderRef>:<></>}
-      {isValid?<EditerRef  idRef={popupInfo.Id} buttonTitle="Editer la référence" ctx={props.context} ></EditerRef>:<></>}
-      {isValid?<SuppRef idRef ={popupInfo.Id} buttonTitle="Supprimer la référence" ctx={props.context}></SuppRef>:<></>}
-      <a className={styles.rightFloat} href="#" onClick={(event)=> {event.preventDefault();WindowPopUp('', 'https://agroupma.sharepoint.com/sites/DEXA2022/Lists/l_dexa/DispForm.aspx?ID='+popupInfo.Id, 'Comparables');}}>Voir plus...</a>
+      {isValidateur && isNotValid?<ValiderRef idRef={popupInfo.Id} buttonTitle="Valider la référence" ctx={props.context}></ValiderRef>:<></>}
+      {isNotValid?<EditerRef  idRef={popupInfo.Id} buttonTitle="Editer la référence" ctx={props.context} ></EditerRef>:<></>}
+      {isNotValid?<SuppRef idRef ={popupInfo.Id} buttonTitle="Supprimer la référence" ctx={props.context}></SuppRef>:<></>}
+      <a className={styles.rightFloat} href="#" onClick={(event)=> {
+        event.preventDefault(); 
+        setWindowPopUp(WindowPopUp('', 'https://agroupma.sharepoint.com/sites/DEXA2022/Lists/l_dexa/DispForm.aspx?ID='+popupInfo.Id, 'Comparables'));
+      }}>Voir plus...</a>
     </div>
   };
   const PopupRapport = ({ lat, lng}) => {
@@ -196,10 +201,11 @@ export default function MapContainer(props:IMapContainerProps){
     };
     var comparables = await sp.web.lists.getByTitle("Comparables").items.getAll();
     var comparable = await comparables.filter(query)
-    if(comparable[0].validateur_refId !== null)
-      setIsValid(comparable);
+    console.log("comparable", comparable)
+    if(comparable[0].validateur_refId === null)
+      setIsNotValid(comparable);
     else
-      setIsValid(null)
+      setIsNotValid(null)
   }
   async function getInfoUser(){
     let user = await sp.web.currentUser();
@@ -209,9 +215,9 @@ export default function MapContainer(props:IMapContainerProps){
     var validateurs = await sp.web.lists.getByTitle("l_validateurs").items.getAll();
     var userConnected = await validateurs.filter(query)
     if(userConnected.length != 0)
-      setIfValidateur(userConnected)
+      setIsValidateur(userConnected)
     else
-      setIfValidateur(null)
+      setIsValidateur(null)
   }
   async function getDGI(lat,lng){
     var query = function(element) {
@@ -304,6 +310,7 @@ export default function MapContainer(props:IMapContainerProps){
         {popupInfoRapport ? <PopupRapport lat={getLat(popupInfoRapport.Latitude_Longitude)} lng={getLng(popupInfoRapport.Latitude_Longitude)}/>:<></>}
         {popupInfo ? <Popup lat={getLat(popupInfo.Latitude_Longitude)} lng={getLng(popupInfo.Latitude_Longitude)}/>:<></>}
         {rightClickMap ? <PopupRightOrganisme lat={lat} lng={lng} modaleTitle={"Ajouter Réference"}/>:<></>}
+        {windowPopUp === 0 ? <DialogCredit/> : <></>}
       </GoogleMapReact>
     </div>
   );

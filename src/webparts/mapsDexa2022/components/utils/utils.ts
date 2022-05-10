@@ -49,7 +49,7 @@ export async function WindowPopUp(modalTitle:string, url:string, from_list:strin
             }
         }
     }
-    const modalWindow = window.open(url_page, modalTitle, "width=840,height=600,menubar=no,toolbar=no,directories=no,titlebar=no,resizable=no,scrollbars=no,status=no,location=no,top="+top+", left="+left);
+    window.open(url_page, modalTitle, "width=840,height=600,menubar=no,toolbar=no,directories=no,titlebar=no,resizable=no,scrollbars=no,status=no,location=no,top="+top+", left="+left);
 }
 export function estimated_price(Max_price:number, Min_price:number, calculated_score:number){
     var _calculated_A_coefficient =calculated_A_coefficient(Max_price,Min_price);
@@ -126,6 +126,24 @@ export function extendDistanceFiltrer(itemsDexa:any, start_point:any, start_dis:
     }
     return extendDistanceFiltrer(itemsDexa,start_point, start_dis+250, end_dis, type_de_bien, type_de_ref, date_de_ref);//pas 250 m
 }
+export function extendDistanceFiltrerWithUser(itemsDexa:any, start_point:any, start_dis:number, end_dis:number){
+    var query = function(element) {
+        var lat = getLat(element.Latitude_Longitude);
+        var lng = getLng(element.Latitude_Longitude);
+        var end_point = {
+            latitude: lat,
+            longitude: lng
+        };
+        var dis = haversine(start_point, end_point);
+        return element.is_deleted ==="Non" && dis <= start_dis/1000;
+    };
+    
+    const filterd_list_dexa = itemsDexa.filter(query);
+    if (start_dis === end_dis || filterd_list_dexa.length > 10){
+        return filterd_list_dexa;
+    }
+    return extendDistanceFiltrerWithUser(itemsDexa,start_point, start_dis+250, end_dis);
+}
 export function extendDistanceFiltrerRapport(rapport_classic:any,grand_rapport:any,start_point:any, start_dis:number, end_dis:number,type_de_bien:string[]){
     var query = function(element) {
         var isIncluded = false;
@@ -142,7 +160,7 @@ export function extendDistanceFiltrerRapport(rapport_classic:any,grand_rapport:a
                 isIncluded =  type_de_bien.some(value => element_type_de_bien.includes(value));
             }
             if(type_de_bien.length===0){
-                return element.FileSystemObjectType === 0;
+                return element.FileSystemObjectType === 0 && dis <= start_dis/1000;
             }
             else{
                 return isIncluded && element.FileSystemObjectType === 0 && dis <= start_dis/1000;

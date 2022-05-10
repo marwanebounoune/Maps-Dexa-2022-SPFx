@@ -15,7 +15,7 @@ const modelProps = {
 };
 const dialogContentProps = {
   type: DialogType.largeHeader,
-  title: "Selectionnez le type d'évaluation!",
+  title: "Crédit épuisé.",
   subText: '',
 };
 
@@ -24,7 +24,6 @@ export const DialogCredit: React.FunctionComponent = () => {
 
   return (
     <>
-      <a className={styles.Pointer} onClick={toggleHideDialog}>Crédit épuisé</a>
       <Dialog
         hidden={hideDialog}
         onDismiss={toggleHideDialog}
@@ -32,12 +31,6 @@ export const DialogCredit: React.FunctionComponent = () => {
         modalProps={modelProps}
       >
         <h3>Votre crédit est épuisé. Pour avoir un crédit illimite ou pour plus d'information veuiller contacter votre fournisseur.</h3>
-        {/*<a href="#" onClick={(event)=> {event.preventDefault(); WindowPopUp("Residentiel", "https://valactifcom.sharepoint.com/sites/vlctf-client2/_layouts/15/listform.aspx?PageType=8&ListId=%7B4077F36A-8F58-4BC1-9E18-E3F7163D1796%7D&RootFolder=%2Fsites%2Fvlctf-client2%2FLists%2Fl_valorisation&Source=https%3A%2F%2Fvalactifcom.sharepoint.com%2Fsites%2Fvlctf-client2%2FLists%2Fl_valorisation%2FAllItems.aspx%3Forigin%3DcreateList&ContentTypeId=0x010007073A6AF0308845A110E1D52E7403480100DAF75C9314FEFE4DA4D51976A38E01A5","");}}>Residentiel</a>
-        <br/>
-        <a href="#" onClick={(event)=> {event.preventDefault(); WindowPopUp("Villa", "","");}}>Villa</a>
-        <br/>
-        <a href="#" onClick={(event)=> {event.preventDefault(); WindowPopUp("Terrain pour villa", "","");}}>Terrain pour villa</a>
-        <br/>*/}
       </Dialog>
     </>
   );

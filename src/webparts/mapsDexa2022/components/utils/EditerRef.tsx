@@ -42,11 +42,9 @@ export default function EditerRef (props:IValiderProps){
       //console.log("userConn", userConn);
 
       return (
-        <div>{userConn?<></>:
           <Stack horizontal horizontalAlign="start"> 
           <ActionButton iconProps={{iconName: 'Edit'}} text={props.buttonTitle} onClick={(event)=> {event.preventDefault(); WindowPopUp('', 'https://agroupma.sharepoint.com/:li:/s/DEXA2022/E6JE6RWBeupIiygDMfN051YBmru874WVyQ8A2UW8589czw?e=4cKQed', "");}}/>
-          </Stack>}
-        </div>
+          </Stack>
       );
         
     }
