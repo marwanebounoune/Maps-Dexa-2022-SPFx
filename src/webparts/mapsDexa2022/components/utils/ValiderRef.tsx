@@ -39,9 +39,7 @@ export default function ValiderRef (props:IValiderProps){
   }
   async function userValidateur(){
     let user = await sp.web.currentUser();
-    console.log("user", user)
     let validateurs = await sp.web.lists.getByTitle("l_validateurs").items()
-    console.log("validateurs", validateurs)
     var query = function(element) {
         return element.membre_refId === user.Id;
     };
