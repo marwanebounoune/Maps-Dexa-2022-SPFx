@@ -125,7 +125,6 @@ export default function MapContainer(props:IMapContainerProps){
     </div>
   };
   const Popup = ({ lat, lng}) => {
-    console.log("popupInfo =>", popupInfo)
     return  (<div className={styles.popupMarker}>
         <div className={styles.CloseDiv} onClick={()=> setPopupInfo(false)}>X</div>
         <div className={styles.arrowPopUp}></div>
@@ -137,7 +136,7 @@ export default function MapContainer(props:IMapContainerProps){
         {!popupInfo.validateur_refId?<ValiderRef idRef={popupInfo.Id} buttonTitle="Valider la référence" ctx={props.context}></ValiderRef>:<></>}
         {!popupInfo.validateur_refId?<EditerRef  idRef={popupInfo.Id} buttonTitle="Editer la référence" ctx={props.context} ></EditerRef>:<></>}
         {!popupInfo.validateur_refId?<SuppRef idRef ={popupInfo.Id} buttonTitle="Supprimer la référence" ctx={props.context}></SuppRef>:<></>}
-        <SignalerRef idRef ={popupInfo.Id} buttonTitle="Signaler la référence" ctx={props.context}></SignalerRef>
+      <SignalerRef idRef ={popupInfo.Id} buttonTitle="Signaler la référence" ctx={props.context} user={popupInfo.QuiasignalerId} nbrSignals={popupInfo.Nombredesignalement} ></SignalerRef>
         <a className={styles.rightFloat} href="#" onClick={(event)=> {
           event.preventDefault(); 
           setWindowPopUp(WindowPopUp('', urlPropertieRef+popupInfo.Id, 'Pins'));

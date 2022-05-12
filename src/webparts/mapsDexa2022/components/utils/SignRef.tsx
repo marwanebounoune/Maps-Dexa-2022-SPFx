@@ -9,13 +9,17 @@ import "@pnp/sp/security/list";
 import "@pnp/sp/site-users/web";
 import "@pnp/sp/site-groups/web";
 import { Dialog } from '@microsoft/sp-dialog';
+import styles from "../MapsDexa2022.module.scss";
 
 export interface ISignalerProps {
-  idRef: number;
+  idRef: any;
   buttonTitle: string;
   ctx: any;
+  user:any;
+  nbrSignals:any;
 }
 export default function SignalerRef (props:ISignalerProps){
+  let [userDejaSign, setUserDejaSign]= React.useState(false);
 
     async function Signaler(){
       let user = await sp.web.currentUser();
@@ -27,16 +31,32 @@ export default function SignalerRef (props:ISignalerProps){
         signaleurs.push(user.Id)
       sp.web.lists.getByTitle("Pins").items.getById(props.idRef).update({
         QuiasignalerId: signaleurs,
-        Nombredesignalement: ++A.Nombredesignalement
-      }).then(()=>{
-        Dialog.alert(`La référence est Signaler.`);
-      }).catch(console.log)
+        Nombredesignalement: ++A.Nombredesignalement,
+      }
+      ).then(()=>{
+        Dialog.alert(`Vous avez signaler la référence avec succès.`);
+      })
+    //}
     }
+    async function userSiganler(){
+      let user = await sp.web.currentUser();
+      let userDejaSignaler = false
+      if(props.user !== null)
+        userDejaSignaler = await props.user.includes(user.Id)
+      setUserDejaSign(userDejaSignaler)
+    }
+    React.useEffect(() => {
+      userSiganler()
+    },[])
     return (
         <div>
-          <Stack horizontal horizontalAlign="start"> 
-            <ActionButton iconProps={{iconName: 'PeopleAlert'}} text={props.buttonTitle} onClick={() => Signaler()}/>
-          </Stack>
+          {props.nbrSignals === 3 || userDejaSign ?
+            <div><span className={styles.spanInfo}>Cette référence est signaler {props.nbrSignals} fois</span></div>
+            :
+            <Stack horizontal horizontalAlign="start"> 
+              <ActionButton iconProps={{iconName: 'PeopleAlert'}} text={props.buttonTitle+" ("+props.nbrSignals+")"} onClick={() => Signaler()}/>
+            </Stack>
+          }
         </div>
       );
     }
