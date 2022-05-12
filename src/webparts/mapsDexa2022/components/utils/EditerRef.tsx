@@ -25,6 +25,8 @@ export default function EditerRef (props:IValiderProps){
     });
     async function user(){
         let user = await sp.web.currentUser();
+        let R = await sp.web.lists.getByTitle("Pins").items.getAll()
+        console.log("R =>",R)
         var userConnected:any = null
         //console.log("user connected =>", user)
         var query = function(element) {

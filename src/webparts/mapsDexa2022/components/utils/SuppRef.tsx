@@ -19,7 +19,7 @@ export interface ISuppProps {
     export default function SuppRef (props:ISuppProps){
     async function Supprimer(){
         let user = await sp.web.currentUser();
-        await sp.web.lists.getByTitle("Comparables").items.getById(props.idRef).update({
+        await sp.web.lists.getByTitle("Pins").items.getById(props.idRef).update({
             ActeurId: user.Id,
             is_deleted: "Oui",
         }).then(()=>{

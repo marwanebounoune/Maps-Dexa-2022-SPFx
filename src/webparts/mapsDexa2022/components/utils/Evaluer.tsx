@@ -40,7 +40,7 @@ export default function Evaluer (props:IEvaluerProps){
   var dialogContentProps = {
     type: DialogType.normal,
     title: 'Alert',
-    subText: "Veuillez Spécifier la surface du Bien."
+    subText: "Cette fonctionalite en cours de developpement."
   };
   const dialogContentDGIProps = {
     type: DialogType.normal,
@@ -96,7 +96,7 @@ export default function Evaluer (props:IEvaluerProps){
         var time_start = new Date(Date.now());
         var s_start = time_start.getSeconds();
 
-        const items: any[] = await sp.web.lists.getByTitle("Comparables").items.select("Id", 
+        const items: any[] = await sp.web.lists.getByTitle("Pins").items.select("Id", 
         "regionsId",
         "Latitude_Longitude",
         "Surface_x0020_pond_x00e9_r_x00e9",
@@ -157,7 +157,17 @@ export default function Evaluer (props:IEvaluerProps){
   }
   return (
     <div>
-      {alert ? <Dialog hidden={!alert} onDismiss={()=>setAlert(false)} dialogContentProps={dialogContentProps} modalProps={modelProps}>
+    <Stack horizontal horizontalAlign="start"> 
+      <ActionButton iconProps={{iconName: 'NewsSearch'}} text={props.buttonTitle} onClick={() => setIsOpen(true)}/>
+    </Stack>
+    {isOpen?
+      <Dialog hidden={!alert} onDismiss={()=>setIsOpen(false)} dialogContentProps={dialogContentProps} modalProps={modelProps}>
+          <DialogFooter>
+            <DefaultButton onClick={()=>setIsOpen(false)} text="Cancel" />
+          </DialogFooter>
+        </Dialog>:<></>}
+      
+      {/* {alert ? <Dialog hidden={!alert} onDismiss={()=>setAlert(false)} dialogContentProps={dialogContentProps} modalProps={modelProps}>
           <DialogFooter>
             <DefaultButton onClick={()=>setAlert(false)} text="Cancel" />
           </DialogFooter>
@@ -180,7 +190,7 @@ export default function Evaluer (props:IEvaluerProps){
         <ActionButton iconProps={{iconName: 'NewsSearch'}} text={props.buttonTitle} onClick={() => setIsOpen(true)}/>
       </Stack>
       <Panel isOpen={isOpen} onDismiss={()=> setIsOpen(false)} headerText="Evaluation" closeButtonAriaLabel="Close">
-        <Stack tokens={{childrenGap:10}}>{/* stack organise les flex */}
+        <Stack tokens={{childrenGap:10}}>{/* stack organise les flex *
           <Dropdown onChange={onChange_type_de_bien} placeholder="Selectionner le type de bien" label="TYPE DE BIEN (n'est disponible que pour les résidentiels)" options={options_type_de_bien} styles={dropdownStyles} defaultSelectedKey={form.type_de_bien}/>
           <Stack tokens={{childrenGap:10}}>
              <TextField label="Surface du bien" placeholder="Entrez la surface du bien" onChange={(e) => setForm({...form, surface:parseInt((e.target as HTMLInputElement).value)}) }/>
@@ -202,7 +212,7 @@ export default function Evaluer (props:IEvaluerProps){
             <DefaultButton text="Cancel" onClick={() => setIsOpen(false)}></DefaultButton>
           </Stack>
         </Stack>
-      </Panel>
+      </Panel> */}
     </div>
   );
 }

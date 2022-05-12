@@ -19,7 +19,7 @@ export function getLng(latlng:string){
 }
 export async function getUser(email: string) {
     let user = await sp.web.ensureUser(email);
-    //console.log("User", user)
+    //console.log("User", user)ff
     return user;
 }
 export async function WindowPopUp(modalTitle:string, url:string, from_list:string){
@@ -30,7 +30,7 @@ export async function WindowPopUp(modalTitle:string, url:string, from_list:strin
     const currentUser = await sp.web.currentUser();
     var userId =  currentUser.Id;
     //console.log("email: ", userId);
-    if(from_list === "Comparables"){
+    if(from_list === "Pins"){
         const credits = await sp.web.lists.getByTitle("l_credits").items.getAll();
         var query = function(element) {
             return element.userId === userId;
@@ -84,14 +84,14 @@ export function extendDistanceEvaluer(itemsDexa:any, start_point:any, start_dis:
             longitude: lng
         };
         var dis = haversine(start_point, end_point);
-        var type_de_bien = element.Type_x0020_de_x0020_bien;
+        var type_de_bien = element.Type_x0020_de_x0020_bien[0];
         var el_prix:number = null;
         if(type_de_bien === "Résidentiel" || type_de_bien === "Commercial" || type_de_bien === "Professionnel")
             el_prix = parseInt(element.Prix_x0020_unitaire_x0020_pond_x);
         else
             el_prix = parseInt(element.Prix_x0020_unitaire_x0020_terrai);
         var _is_valide_PU = is_valide_PU(parseInt(DGI.Prix_unitaire),el_prix);
-        var el =  element.Type_x0020_de_x0020_bien === type_de_bien && element.Type_x0020_de_x0020_R_x00e9_f_x0 === "Vente" && dis <= start_dis/1000 && _is_valide_PU;
+        var el =  element.Type_x0020_de_x0020_bien[0] === type_de_bien && element.Type_x0020_de_x0020_R_x00e9_f_x0 === "Vente" && dis <= start_dis/1000 && _is_valide_PU;
         if (el){
             array_prix_dexa.push(el_prix);
             return el;
@@ -104,6 +104,7 @@ export function extendDistanceEvaluer(itemsDexa:any, start_point:any, start_dis:
     return extendDistanceEvaluer(itemsDexa,start_point, start_dis+100, end_dis,DGI, type_de_bien);
 }
 export function extendDistanceFiltrer(itemsDexa:any, start_point:any, start_dis:number, end_dis:number, type_de_bien:string,type_de_ref:string[], date_de_ref:string[]){
+    console.log("itemsDexa", itemsDexa)
     var query = function(element) {
         var lat = getLat(element.Latitude_Longitude);
         var lng = getLng(element.Latitude_Longitude);
@@ -114,7 +115,7 @@ export function extendDistanceFiltrer(itemsDexa:any, start_point:any, start_dis:
         //console.log("element =>",element)
         var dis = haversine(start_point, end_point);
         var date = new Date(element.Date_x0020_de_x0020_la_x0020_r_x).getFullYear().toString()
-        return element.is_deleted ==="Non" && element.Type_x0020_de_x0020_bien === type_de_bien && type_de_ref.indexOf(element.Type_x0020_de_x0020_R_x00e9_f_x0)!=-1 && date_de_ref.indexOf(date)!=-1 && dis <= start_dis/1000;
+        return element.is_deleted ==="Non" && element.Type_x0020_de_x0020_bien[0] === type_de_bien && type_de_ref.indexOf(element.Type_x0020_de_x0020_R_x00e9_f_x0)!=-1 && date_de_ref.indexOf(date)!=-1 && dis <= start_dis/1000;
     };
     
     const filterd_list_dexa = itemsDexa.filter(query);
@@ -155,7 +156,7 @@ export function extendDistanceFiltrerRapport(rapport_classic:any,grand_rapport:a
                 longitude: lng
             };
             var dis = haversine(start_point, end_point);
-            var element_type_de_bien = element.Type_x0020_de_x0020_bien;
+            var element_type_de_bien = element.Type_x0020_de_x0020_bien[0];
             if(element_type_de_bien!=null){
                 isIncluded =  type_de_bien.some(value => element_type_de_bien.includes(value));
             }

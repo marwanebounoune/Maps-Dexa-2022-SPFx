@@ -16,6 +16,7 @@ import PopOutFilter from './fabric-ui/PopOutFilter';
 import ValiderRef from "./utils/ValiderRef";
 import EditerRef from "./utils/EditerRef";
 import SuppRef from "./utils/SuppRef";
+import SignalerRef from "./utils/SignRef";
 
 interface IMapContainerProps {
   GoogleKey:string;
@@ -44,6 +45,9 @@ export default function MapContainer(props:IMapContainerProps){
   let [isValidateur, setIsValidateur]= React.useState(null);
   let [isNotValid, setIsNotValid]= React.useState(null);
   let [windowPopUp, setWindowPopUp]= React.useState(null);
+  let [isNotSignaler, setIsNotSignaler]= React.useState(null);
+  let [isSignaler, setIsSignaler]=React.useState(null);
+
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   const FiltrageDialogContentProps = {
     type: DialogType.largeHeader,
@@ -113,7 +117,7 @@ export default function MapContainer(props:IMapContainerProps){
     </div>
   };
   const Popup = ({ lat, lng}) => {
-    getIfValid();
+    //getIfSign();
     return  <div className={styles.popupMarker}>
       <div className={styles.CloseDiv} onClick={()=> setPopupInfo(false)}>X</div>
       <div className={styles.arrowPopUp}></div>
@@ -124,12 +128,14 @@ export default function MapContainer(props:IMapContainerProps){
       {popupInfo.Surface_x0020_construite?<div><span className={styles.spanInfo}>Surface Construite:</span><span>{popupInfo.Surface_x0020_construite} m²</span></div>:<></>}
       {popupInfo.Surface_x0020_pond_x00e9_r_x00e9?<div><span className={styles.spanInfo}>Surface Pondéré:</span><span>{popupInfo.Surface_x0020_pond_x00e9_r_x00e9} m²</span></div>:<></>}
       <br/>
-      {isValidateur && isNotValid?<ValiderRef idRef={popupInfo.Id} buttonTitle="Valider la référence" ctx={props.context}></ValiderRef>:<></>}
-      {isNotValid?<EditerRef  idRef={popupInfo.Id} buttonTitle="Editer la référence" ctx={props.context} ></EditerRef>:<></>}
-      {isNotValid?<SuppRef idRef ={popupInfo.Id} buttonTitle="Supprimer la référence" ctx={props.context}></SuppRef>:<></>}
-      <a className={styles.rightFloat} href="#" onClick={(event)=> {
+      <ValiderRef idRef={popupInfo.Id} buttonTitle="Valider la référence" ctx={props.context}></ValiderRef>
+      <SignalerRef idRef ={popupInfo.Id} buttonTitle="Signaler la référence" ctx={props.context}></SignalerRef>
+      <EditerRef  idRef={popupInfo.Id} buttonTitle="Editer la référence" ctx={props.context} ></EditerRef>
+      <SuppRef idRef ={popupInfo.Id} buttonTitle="Supprimer la référence" ctx={props.context}></SuppRef>
+
+     <a className={styles.rightFloat} href="#" onClick={(event)=> {
         event.preventDefault(); 
-        setWindowPopUp(WindowPopUp('', 'https://agroupma.sharepoint.com/sites/DEXA2022/Lists/l_dexa/DispForm.aspx?ID='+popupInfo.Id, 'Comparables'));
+        setWindowPopUp(WindowPopUp('', 'https://agroupma.sharepoint.com/sites/DEXA2022/Lists/Pins/DispForm.aspx?ID='+popupInfo.Id, 'Pins'));
       }}>Voir plus...</a>
     </div>
   };
@@ -194,30 +200,22 @@ export default function MapContainer(props:IMapContainerProps){
     return inputSearch;
   };
   ///////////////////////////////////////////////////////////////////////////////////////////////////
-  async function getIfValid(){
-    var query = function(element) {
-      return element.ID === popupInfo.ID;
-    };
-    var comparables = await sp.web.lists.getByTitle("Comparables").items.getAll();
-    var comparable = await comparables.filter(query)
-    console.log("comparable", comparable)
-    if(comparable[0].validateur_refId === null)
-      setIsNotValid(comparable);
-    else
-      setIsNotValid(null)
-  }
-  async function getInfoUser(){
-    let user = await sp.web.currentUser();
-    var query = function(element) {
-      return element.membre_refId === user.Id;
-    };
-    var validateurs = await sp.web.lists.getByTitle("l_validateurs").items.getAll();
-    var userConnected = await validateurs.filter(query)
-    if(userConnected.length != 0)
-      setIsValidateur(userConnected)
-    else
-      setIsValidateur(null)
-  }
+  /////////////////////////////////////
+    /*async function getIfSign(){
+     var query = function(element) {
+       return element.ID === popupInfo.ID;
+     };
+     var compar = await sp.web.lists.getByTitle("Pins").items.getAll();
+    var compara = await compar.filter(query)
+     console.log("comparable", compara)
+     if(compara[0].QuiasignalerId === null)
+     setIsNotSignaler(compara);
+     else
+     setIsNotSignaler(null)
+   }*/
+   
+  ////////
+  
   async function getDGI(lat,lng){
     var query = function(element) {
       return isPointInPolygon(lat, lng, element.Polygone);
@@ -280,10 +278,6 @@ export default function MapContainer(props:IMapContainerProps){
     await setGrandRapportMarkers(grand_rapport);
     setUpdatedMarker(true);
   }
-
-  React.useEffect(() => {
-      getInfoUser();
-  },[]);
 
   return (
     <div className={styles.googleMapReact}>
