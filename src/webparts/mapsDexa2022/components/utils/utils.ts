@@ -103,7 +103,7 @@ export function extendDistanceEvaluer(itemsDexa:any, start_point:any, start_dis:
     }
     return extendDistanceEvaluer(itemsDexa,start_point, start_dis+100, end_dis,DGI, type_de_bien);
 }
-export function extendDistanceFiltrer(itemsDexa:any, start_point:any, start_dis:number, end_dis:number, type_de_bien:string,type_de_ref:string[], date_de_ref:string[]){
+export function extendDistanceFiltrer(itemsDexa:any, start_point:any, start_dis:number, end_dis:number, type_de_bien:string, type_de_ref:string[], date_de_ref:string[]){
     var query = function(element) {
         var lat = getLat(element.Latitude_Longitude);
         var lng = getLng(element.Latitude_Longitude);

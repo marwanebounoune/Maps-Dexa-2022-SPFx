@@ -34,8 +34,8 @@ export default function ValiderRef (props:IValiderProps){
       validateur_refId: user.Id,
       date_x0020_de_x0020_validation: _date
     }).then(()=>{
-      Dialog.alert(`La référence est validée avec succès.`);
-    }).catch(console.log)
+     Dialog.alert(`La référence est validée avec succès.`);
+    })
   }
   
   return (

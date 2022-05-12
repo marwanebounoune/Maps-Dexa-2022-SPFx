@@ -126,7 +126,6 @@ export default function MapContainer(props:IMapContainerProps){
     </div>
   };
   const Popup = ({ lat, lng}) => {
-    //getIfSign();
     return  <div className={styles.popupMarker}>
       <div className={styles.CloseDiv} onClick={()=> setPopupInfo(false)}>X</div>
       <div className={styles.arrowPopUp}></div>
@@ -137,8 +136,8 @@ export default function MapContainer(props:IMapContainerProps){
       {popupInfo.Surface_x0020_construite?<div><span className={styles.spanInfo}>Surface Construite:</span><span>{popupInfo.Surface_x0020_construite} m²</span></div>:<></>}
       {popupInfo.Surface_x0020_pond_x00e9_r_x00e9?<div><span className={styles.spanInfo}>Surface Pondéré:</span><span>{popupInfo.Surface_x0020_pond_x00e9_r_x00e9} m²</span></div>:<></>}
       <br/>
-      <ValiderRef idRef={popupInfo.Id} buttonTitle="Valider la référence" ctx={props.context}></ValiderRef>
-      <SignalerRef idRef ={popupInfo.Id} buttonTitle="Signaler la référence" ctx={props.context}></SignalerRef>
+      <ValiderRef idRef={popupInfo.Id} buttonTitle="Valider la référence" ctx={props.context}  ></ValiderRef>
+      <SignalerRef idRef ={popupInfo.Id} buttonTitle="Signaler la référence" ctx={props.context} user={popupInfo.QuiasignalerId} nbrSignals={popupInfo.Nombredesignalement} ></SignalerRef>
       <EditerRef  idRef={popupInfo.Id} buttonTitle="Editer la référence" ctx={props.context} ></EditerRef>
       <SuppRef idRef ={popupInfo.Id} buttonTitle="Supprimer la référence" ctx={props.context}></SuppRef>
 

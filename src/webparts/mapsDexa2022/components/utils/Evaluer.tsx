@@ -6,7 +6,6 @@ import { ActionButton, DefaultButton, Dialog, DialogFooter, DialogType, Dropdown
 import * as React from 'react';
 import { DISTANCE_END_EVALUATION, DISTANCE_START_EVALUATION, sp } from '../../Constants';
 import { calculated_score, estimated_price, extendDistanceEvaluer, getLat, getLng } from './utils';
-import PopOut from '../fabric-ui/PopOut';
 import "@pnp/sp/webs";
 import styles from '../MapsDexa2022.module.scss';
 

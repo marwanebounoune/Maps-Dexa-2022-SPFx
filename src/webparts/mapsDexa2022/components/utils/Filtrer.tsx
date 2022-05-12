@@ -90,7 +90,7 @@ export default function Filtrer (props:IFiltrerProps){
     else{
       var time_start = new Date(Date.now());
       var s_start = time_start.getSeconds();
-      await sp.web.lists.getByTitle("Pins").items.select("is_deleted","Id","regionsId","Latitude_Longitude","Date_x0020_de_x0020_la_x0020_r_x","Surface_x0020_pond_x00e9_r_x00e9","Surface_x0020_construite","Surface_x0020_terrain","Type_x0020_de_x0020_bien","Type_x0020_de_x0020_R_x00e9_f_x0", "Title", "Prix_x0020_unitaire_x0020__x002F","Prix_x0020_unitaire_x0020_pond_x","Prix_x0020_unitaire_x0020_terrai","Localis_x00e9_")
+      await sp.web.lists.getByTitle("Pins").items.select("QuiasignalerId", "Nombredesignalement", "is_deleted","Id","regionsId","Latitude_Longitude","Date_x0020_de_x0020_la_x0020_r_x","Surface_x0020_pond_x00e9_r_x00e9","Surface_x0020_construite","Surface_x0020_terrain","Type_x0020_de_x0020_bien","Type_x0020_de_x0020_R_x00e9_f_x0", "Title", "Prix_x0020_unitaire_x0020__x002F","Prix_x0020_unitaire_x0020_pond_x","Prix_x0020_unitaire_x0020_terrai","Localis_x00e9_")
       .getAll().then(async res=>{
         rest_filterd_list = extendDistanceFiltrer(res,start,DISTANCE_START_FILTRAGE, DISTANCE_END_FILTRAGE, form.type_de_bien, form.type_de_ref, form.date_de_ref);
         console.log("Form", form)

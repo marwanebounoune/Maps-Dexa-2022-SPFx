@@ -24,7 +24,7 @@ export interface ISuppProps {
             is_deleted: "Oui",
         }).then(()=>{
             Dialog.alert(`La référence est Supprimer.`);
-        }).catch(console.log)
+        })
     }
     return (
         <div>
