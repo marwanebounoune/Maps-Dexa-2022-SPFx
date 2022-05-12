@@ -25,8 +25,6 @@ export default function SignalerRef (props:ISignalerProps){
         signaleurs = [user.Id]
       else
         signaleurs.push(user.Id)
-      console.log("signaleurs", signaleurs)
-      console.log("A", A)
       sp.web.lists.getByTitle("Pins").items.getById(props.idRef).update({
         QuiasignalerId: signaleurs,
         Nombredesignalement: ++A.Nombredesignalement

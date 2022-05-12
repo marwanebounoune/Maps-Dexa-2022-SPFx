@@ -9,11 +9,10 @@ export default function PopOutFilter (props:IPopOutFilter) {
   let prix_unit:any = Get_all_Prix_unit();
   
   function Get_all_Prix_unit(){
-    //console.log("Information filtage =>", props.Information)
     let prix_unit:any = [];
     var p_int:number = null;
     props.Information.ref_dexa.forEach(element => {
-      var type_de_bien = element.Type_x0020_de_x0020_bien;
+      var type_de_bien = element.Type_x0020_de_x0020_bien[0];
       if(type_de_bien === "Résidentiel" || type_de_bien === "Commercial" || type_de_bien === "Professionnel"){
         p_int = parseInt(element.Prix_x0020_unitaire_x0020_pond_x);
       }

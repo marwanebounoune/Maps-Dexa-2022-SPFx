@@ -5,7 +5,7 @@ import GoogleMapReact from 'google-map-react';
 import { ActionButton, Dialog, DialogType, Stack } from 'office-ui-fabric-react';
 import * as React from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { sp } from '../Constants';
+import { sp, urlAddRef, urlPropertieRef } from '../Constants';
 import { getLat, getLng, isPointInPolygon, WindowPopUp } from './utils/utils';
 import Evaluer from './utils/Evaluer';
 import Filtrer from './utils/Filtrer';
@@ -95,7 +95,6 @@ export default function MapContainer(props:IMapContainerProps){
     });
   };
   const Marker = ({ marker, lat, lng, text}) => {
-    console.log("marker =>", marker)
     if(marker.Localis_x00e9_=="Oui" && marker.Type_x0020_de_x0020_R_x00e9_f_x0 === "Vente")
       return <div className={ styles.markerVenteLocaliser }
       onClick={()=> {onMarkerClick(marker);}}
@@ -126,33 +125,30 @@ export default function MapContainer(props:IMapContainerProps){
     </div>
   };
   const Popup = ({ lat, lng}) => {
-    //getIfSign();
-    return  <div className={styles.popupMarker}>
-      <div className={styles.CloseDiv} onClick={()=> setPopupInfo(false)}>X</div>
-      <div className={styles.arrowPopUp}></div>
-      <span className={styles.spanInfo}>Référence: </span>{popupInfo.Title}
-      <br/>
-      <div><span className={styles.spanInfo}>Type de Référence:</span><span>{typeDeBien}</span></div>
-      {popupInfo.Surface_x0020_terrain?<div><span className={styles.spanInfo}>Surface Terrain:</span><span>{popupInfo.Surface_x0020_terrain} m²</span></div>:<></>}
-      {popupInfo.Surface_x0020_construite?<div><span className={styles.spanInfo}>Surface Construite:</span><span>{popupInfo.Surface_x0020_construite} m²</span></div>:<></>}
-      {popupInfo.Surface_x0020_pond_x00e9_r_x00e9?<div><span className={styles.spanInfo}>Surface Pondéré:</span><span>{popupInfo.Surface_x0020_pond_x00e9_r_x00e9} m²</span></div>:<></>}
-      <br/>
-      <ValiderRef idRef={popupInfo.Id} buttonTitle="Valider la référence" ctx={props.context}></ValiderRef>
-      <SignalerRef idRef ={popupInfo.Id} buttonTitle="Signaler la référence" ctx={props.context}></SignalerRef>
-      <EditerRef  idRef={popupInfo.Id} buttonTitle="Editer la référence" ctx={props.context} ></EditerRef>
-      <SuppRef idRef ={popupInfo.Id} buttonTitle="Supprimer la référence" ctx={props.context}></SuppRef>
-
-     <a className={styles.rightFloat} href="#" onClick={(event)=> {
-        event.preventDefault(); 
-        setWindowPopUp(WindowPopUp('', 'https://agroupma.sharepoint.com/sites/DEXA2022/Lists/Pins/DispForm.aspx?ID='+popupInfo.Id, 'Pins'));
-      }}>Voir plus...</a>
-    </div>
+    console.log("popupInfo =>", popupInfo)
+    return  (<div className={styles.popupMarker}>
+        <div className={styles.CloseDiv} onClick={()=> setPopupInfo(false)}>X</div>
+        <div className={styles.arrowPopUp}></div>
+        <div><span className={styles.spanInfo}>Type de bien:</span><span>{popupInfo.Type_x0020_de_x0020_bien[0]}</span></div>
+        {popupInfo.Surface_x0020_terrain?<div><span className={styles.spanInfo}>Surface Terrain:</span><span>{popupInfo.Surface_x0020_terrain} m²</span></div>:<></>}
+        {popupInfo.Surface_x0020_construite?<div><span className={styles.spanInfo}>Surface Construite:</span><span>{popupInfo.Surface_x0020_construite} m²</span></div>:<></>}
+        {popupInfo.Surface_x0020_pond_x00e9_r_x00e9?<div><span className={styles.spanInfo}>Surface Pondéré:</span><span>{popupInfo.Surface_x0020_pond_x00e9_r_x00e9} m²</span></div>:<></>}
+        <br/>
+        {!popupInfo.validateur_refId?<ValiderRef idRef={popupInfo.Id} buttonTitle="Valider la référence" ctx={props.context}></ValiderRef>:<></>}
+        {!popupInfo.validateur_refId?<EditerRef  idRef={popupInfo.Id} buttonTitle="Editer la référence" ctx={props.context} ></EditerRef>:<></>}
+        {!popupInfo.validateur_refId?<SuppRef idRef ={popupInfo.Id} buttonTitle="Supprimer la référence" ctx={props.context}></SuppRef>:<></>}
+        <SignalerRef idRef ={popupInfo.Id} buttonTitle="Signaler la référence" ctx={props.context}></SignalerRef>
+        <a className={styles.rightFloat} href="#" onClick={(event)=> {
+          event.preventDefault(); 
+          setWindowPopUp(WindowPopUp('', urlPropertieRef+popupInfo.Id, 'Pins'));
+        }}>Voir plus...</a>
+      </div>);
   };
   const PopupRapport = ({ lat, lng}) => {
     return <div className={styles.popupMarker}>
       <div className={styles.CloseDiv} onClick={()=> setPopupInfoRapport(false)}>X</div>
       <div className={styles.arrowPopUp}></div>
-      <span className={styles.spanInfo}>Type de bien: </span>{popupInfoRapport.Type_x0020_de_x0020_bien}<br/>
+      <span className={styles.spanInfo}>Type de bien: </span>{popupInfoRapport.Type_x0020_de_x0020_bien[0]}<br/>
       {popupInfoRapport.Surface_x0020_pond_x00e9_r_x00e9?<><span className={styles.spanInfo}>Surface pondéré: </span>{popupInfoRapport.Surface_x0020_pond_x00e9_r_x00e9} Dhs/m2<br/></>:<></>}
       {popupInfoRapport.Surface_x0020_construite?<><span className={styles.spanInfo}>Surface construite: </span>{popupInfoRapport.Surface_x0020_construite} Dhs/m2<br/></>:<></>}
       {popupInfoRapport.Surface_x0020_terrain?<><span className={styles.spanInfo}>Surface terrain: </span>{popupInfoRapport.Surface_x0020_terrain} Dhs/m2<br/></>:<></>}
@@ -175,9 +171,8 @@ export default function MapContainer(props:IMapContainerProps){
       <Evaluer dgi={DGI} buttonTitle="Evaluer le bien" latlng={lat+","+lng} handleEvaluer={(result) => {if(result!=null) {moreInfo(result);}}} ></Evaluer>
       {/*<DialogEvaluation/>
       <br/>*/}
-      <ActionButton iconProps={{iconName: 'Add'}} text="Ajouter une référence" onClick={(event)=> {event.preventDefault(); WindowPopUp('', 'https://agroupma.sharepoint.com/sites/DEXA2022/_layouts/15/listform.aspx?PageType=8&ListId=%7B07F5F07E-1EB2-4DAC-B792-179E07051324%7D&RootFolder=%2Fsites%2FDEXA2022%2FLists%2Fl_dexa&Source=https%3A%2F%2Fagroupma.sharepoint.com%2Fsites%2FDEXA2022%2FLists%2Fl_dexa%2FAllItems.aspx&ContentTypeId=0x0100F7E03D0D804B95439DD41BDF9629E31F0088A336F36BC7B840B3BD1A6BA2057C14', "");}}/>
+      <ActionButton iconProps={{iconName: 'Add'}} text="Ajouter une référence" onClick={(event)=> {event.preventDefault(); WindowPopUp('', urlAddRef, "");}}/>
       <FiltrerWithUser context={props.context} handleFilterWhithUser={async (items_dexa) => await displayAllMarker(items_dexa)} buttonTitle={"Fitrage par user"} latlng={lat+","+lng} dgi={DGI}/>
-        
     </div>;
   };
   const SearchBox = ({ map, maps, onPlacesChanged, placeholder }) => {
@@ -216,7 +211,6 @@ export default function MapContainer(props:IMapContainerProps){
      };
      var compar = await sp.web.lists.getByTitle("Pins").items.getAll();
     var compara = await compar.filter(query)
-     console.log("comparable", compara)
      if(compara[0].QuiasignalerId === null)
      setIsNotSignaler(compara);
      else
@@ -299,11 +293,6 @@ export default function MapContainer(props:IMapContainerProps){
         <div> 
           <SearchBox onPlacesChanged={null} map={map} maps={maps} placeholder={"Search location ..."}/>
         </div>
-        <br/>
-        <br/>
-        {/* <div>
-          <FiltrerWithUser context={props.context} handleFilterWhithUser={ async (items_dexa) => await displayAllMarker(items_dexa) }/>
-        </div> */}
       </Stack>
       <GoogleMapReact bootstrapURLKeys={{ key: props.GoogleKey, libraries:['places'] }} defaultCenter={defaultProps.center} defaultZoom={defaultProps.zoom} yesIWantToUseGoogleMapApiInternals onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)} options={map => ({streetViewControl: true, mapTypeControl: true, mapTypeControlOptions: {style: map.MapTypeControlStyle.DEFAULT, position: map.ControlPosition.TOP_RIGHT, mapTypeIds: [map.MapTypeId.ROADMAP, map.MapTypeId.SATELLITE, map.MapTypeId.HYBRID]}})}>
         {rapportClassicMarkers ? rapportClassicMarkers.map(marker=> <MarkerRapportClassic lat={getLat(marker.Latitude_Longitude)} lng={getLng(marker.Latitude_Longitude)} text={marker.Title} marker={marker}/>):<></>}

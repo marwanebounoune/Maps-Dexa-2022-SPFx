@@ -39,7 +39,6 @@ export default function FiltrerWithUser (props:IFiltrerWithUserProps){
     const Refs:any = await sp.web.lists.getByTitle("Pins").items.getAll();
     const refs = Refs.filter(query);
     rest_filterd_list = extendDistanceFiltrerWithUser(refs,start,DISTANCE_START_FILTRAGE, DISTANCE_END_FILTRAGE)
-    console.log("rest_filterd_list", rest_filterd_list)
     props.handleFilterWhithUser(rest_filterd_list);
   }
   return (

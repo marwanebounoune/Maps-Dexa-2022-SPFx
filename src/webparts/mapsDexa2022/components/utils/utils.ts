@@ -19,7 +19,6 @@ export function getLng(latlng:string){
 }
 export async function getUser(email: string) {
     let user = await sp.web.ensureUser(email);
-    //console.log("User", user)ff
     return user;
 }
 export async function WindowPopUp(modalTitle:string, url:string, from_list:string){
@@ -29,7 +28,6 @@ export async function WindowPopUp(modalTitle:string, url:string, from_list:strin
     var credit = null;
     const currentUser = await sp.web.currentUser();
     var userId =  currentUser.Id;
-    //console.log("email: ", userId);
     if(from_list === "Pins"){
         const credits = await sp.web.lists.getByTitle("l_credits").items.getAll();
         var query = function(element) {
@@ -104,20 +102,42 @@ export function extendDistanceEvaluer(itemsDexa:any, start_point:any, start_dis:
     return extendDistanceEvaluer(itemsDexa,start_point, start_dis+100, end_dis,DGI, type_de_bien);
 }
 export function extendDistanceFiltrer(itemsDexa:any, start_point:any, start_dis:number, end_dis:number, type_de_bien:string,type_de_ref:string[], date_de_ref:string[]){
-    var query = function(element) {
-        var lat = getLat(element.Latitude_Longitude);
-        var lng = getLng(element.Latitude_Longitude);
-        var end_point = {
-            latitude: lat,
-            longitude: lng
+    if (type_de_bien === "Villa")
+        var query = function(element) {
+            var lat = getLat(element.Latitude_Longitude);
+            var lng = getLng(element.Latitude_Longitude);
+            var end_point = {
+                latitude: lat,
+                longitude: lng
+            };
+            var dis = haversine(start_point, end_point);
+            var date = new Date(element.Date_x0020_de_x0020_la_x0020_r_x).getFullYear().toString()
+            return element.is_deleted ==="Non" && (element.Type_x0020_de_x0020_bien[0] === "Villa" || element.Type_x0020_de_x0020_bien[0] === "Terrain Villa") && type_de_ref.indexOf(element.Type_x0020_de_x0020_R_x00e9_f_x0)!=-1 && date_de_ref.indexOf(date)!=-1 && dis <= start_dis/1000;
         };
-        //console.log("element =>",element)
-        var dis = haversine(start_point, end_point);
-        var date = new Date(element.Date_x0020_de_x0020_la_x0020_r_x).getFullYear().toString()
-        console.log("type_de_ref.indexOf(element.Type_x0020_de_x0020_R_x00e9_f_x0)!=-1", type_de_ref.indexOf(element.Type_x0020_de_x0020_R_x00e9_f_x0)!=-1)
-        return element.is_deleted ==="Non" && element.Type_x0020_de_x0020_bien[0] === type_de_bien && type_de_ref.indexOf(element.Type_x0020_de_x0020_R_x00e9_f_x0)!=-1 && date_de_ref.indexOf(date)!=-1 && dis <= start_dis/1000;
-    };
-    
+    else if (type_de_bien === "Terrain")
+        var query = function(element) {
+            var lat = getLat(element.Latitude_Longitude);
+            var lng = getLng(element.Latitude_Longitude);
+            var end_point = {
+                latitude: lat,
+                longitude: lng
+            };
+            var dis = haversine(start_point, end_point);
+            var date = new Date(element.Date_x0020_de_x0020_la_x0020_r_x).getFullYear().toString()
+            return element.is_deleted ==="Non" && (element.Type_x0020_de_x0020_bien[0] === "Terrain Agricole" || element.Type_x0020_de_x0020_bien[0] === "Terrain Construit" || element.Type_x0020_de_x0020_bien[0] === "Terrain Urbain" || element.Type_x0020_de_x0020_bien[0] === "Terrain Villa") && type_de_ref.indexOf(element.Type_x0020_de_x0020_R_x00e9_f_x0)!=-1 && date_de_ref.indexOf(date)!=-1 && dis <= start_dis/1000;
+        };
+    else
+        var query = function(element) {
+            var lat = getLat(element.Latitude_Longitude);
+            var lng = getLng(element.Latitude_Longitude);
+            var end_point = {
+                latitude: lat,
+                longitude: lng
+            };
+            var dis = haversine(start_point, end_point);
+            var date = new Date(element.Date_x0020_de_x0020_la_x0020_r_x).getFullYear().toString()
+            return element.is_deleted ==="Non" && element.Type_x0020_de_x0020_bien[0] === type_de_bien && type_de_ref.indexOf(element.Type_x0020_de_x0020_R_x00e9_f_x0)!=-1 && date_de_ref.indexOf(date)!=-1 && dis <= start_dis/1000;
+        };
     const filterd_list_dexa = itemsDexa.filter(query);
     if (start_dis === end_dis || filterd_list_dexa.length > 10){
         return {
@@ -181,7 +201,6 @@ export function extendDistanceFiltrerRapport(rapport_classic:any,grand_rapport:a
 }
 export async function get_dgi_zone(lat:number, lng:number) {
     await sp.web.lists.getByTitle("l_ref_DGI").items.getAll().then(res=>{
-        //console.log("res DGI => ", res)
         var query = function(element) {
             return isPointInPolygon(lat, lng, element.Polygone);
         };

@@ -16,7 +16,6 @@ export default function PopOut (props:IPopOutProps) {
           {message}
         </MessageBar>
   );
-  //console.log("props.evaluation.nbr_ref_dexa", props.evaluation.nbr_ref_dexa);
   return (
   <>
     <div>

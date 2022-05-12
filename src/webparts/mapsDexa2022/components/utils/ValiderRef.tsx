@@ -20,22 +20,22 @@ export default function ValiderRef (props:IValiderProps){
 
   async function valider(){
     let user = await sp.web.currentUser();
-    var _date = new Date().toISOString();
-    let itemAvantValid = await sp.web.lists.getByTitle("Pins").items.getById(props.idRef)
-    console.log("itemAvantValid", itemAvantValid)
-    await (await sp.web.lists.ensure("Pins")).list.items.getById(props.idRef).breakRoleInheritance();
-    const { Id: roleDefId1 } = await sp.web.roleDefinitions.getByName("Collaboration")();
-    const { Id: roleDefId2 } = await sp.web.roleDefinitions.getByName("Après validation des références")();
-    const groups1 = await sp.web.siteGroups.getByName("Direction")();
-    const groups2 = await sp.web.siteGroups.getByName("Elaborateur_visiteur")();
-    await itemAvantValid.roleAssignments.add(groups1.Id, roleDefId1);
-    await itemAvantValid.roleAssignments.add(groups2.Id, roleDefId2);
-    await sp.web.lists.getByTitle("Pins").items.getById(props.idRef).update({
-      validateur_refId: user.Id,
-      date_x0020_de_x0020_validation: _date
-    }).then(()=>{
-      Dialog.alert(`La référence est validée avec succès.`);
-    }).catch(console.log)
+    console.log("user", user)
+    // var _date = new Date().toISOString();
+    // let itemAvantValid = await sp.web.lists.getByTitle("Pins").items.getById(props.idRef)
+    // await (await sp.web.lists.ensure("Pins")).list.items.getById(props.idRef).breakRoleInheritance();
+    // const { Id: roleDefId1 } = await sp.web.roleDefinitions.getByName("Collaboration")();
+    // const { Id: roleDefId2 } = await sp.web.roleDefinitions.getByName("Après validation des références")();
+    // const groups1 = await sp.web.siteGroups.getByName("Direction")();
+    // const groups2 = await sp.web.siteGroups.getByName("Elaborateur_visiteur")();
+    // await itemAvantValid.roleAssignments.add(groups1.Id, roleDefId1);
+    // await itemAvantValid.roleAssignments.add(groups2.Id, roleDefId2);
+    // await sp.web.lists.getByTitle("Pins").items.getById(props.idRef).update({
+    //   validateur_refId: user.Id,
+    //   date_x0020_de_x0020_validation: _date
+    // }).then(()=>{
+    //   Dialog.alert(`La référence est validée avec succès.`);
+    // }).catch(console.log)
   }
   
   return (

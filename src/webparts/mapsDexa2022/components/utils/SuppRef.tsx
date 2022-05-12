@@ -16,7 +16,7 @@ export interface ISuppProps {
     buttonTitle: string;
     ctx: any;
 }
-    export default function SuppRef (props:ISuppProps){
+export default function SuppRef (props:ISuppProps){
     async function Supprimer(){
         let user = await sp.web.currentUser();
         await sp.web.lists.getByTitle("Pins").items.getById(props.idRef).update({
@@ -28,9 +28,9 @@ export interface ISuppProps {
     }
     return (
         <div>
-        <Stack horizontal horizontalAlign="start"> 
-            <ActionButton iconProps={{iconName: 'Delete'}} text={props.buttonTitle} onClick={() => Supprimer()}/>
-        </Stack>
+            <Stack horizontal horizontalAlign="start"> 
+                <ActionButton iconProps={{iconName: 'Delete'}} text={props.buttonTitle} onClick={() => Supprimer()}/>
+            </Stack>
         </div>
     );
-    }
+}
