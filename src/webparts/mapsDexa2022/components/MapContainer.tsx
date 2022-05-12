@@ -95,12 +95,21 @@ export default function MapContainer(props:IMapContainerProps){
     });
   };
   const Marker = ({ marker, lat, lng, text}) => {
-    if(marker.Localis_x00e9_=="Oui")
-      return <div className={ styles.marker }
+    console.log("marker =>", marker)
+    if(marker.Localis_x00e9_=="Oui" && marker.Type_x0020_de_x0020_R_x00e9_f_x0 === "Vente")
+      return <div className={ styles.markerVenteLocaliser }
       onClick={()=> {onMarkerClick(marker);}}
       onContextMenu={()=> onMarkerRightClick(marker)}></div>
-    else
-      return <div className={ styles.markerNonLocaliser }
+    else if(marker.Localis_x00e9_=="Non" && marker.Type_x0020_de_x0020_R_x00e9_f_x0 === "Vente")
+      return <div className={ styles.markerVenteNonLocaliser }
+      onClick={()=> {onMarkerClick(marker);}}
+      onContextMenu={()=> onMarkerRightClick(marker)}></div>
+    else if(marker.Localis_x00e9_=="Oui" && marker.Type_x0020_de_x0020_R_x00e9_f_x0 === "Location")
+      return <div className={ styles.markerLocationLocaliser }
+      onClick={()=> {onMarkerClick(marker);}}
+      onContextMenu={()=> onMarkerRightClick(marker)}></div>
+    else if(marker.Localis_x00e9_=="Non" && marker.Type_x0020_de_x0020_R_x00e9_f_x0 === "Location")
+      return <div className={ styles.markerLocationNonLocaliser }
       onClick={()=> {onMarkerClick(marker);}}
       onContextMenu={()=> onMarkerRightClick(marker)}></div>
   };

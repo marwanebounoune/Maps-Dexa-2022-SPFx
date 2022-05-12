@@ -104,7 +104,6 @@ export function extendDistanceEvaluer(itemsDexa:any, start_point:any, start_dis:
     return extendDistanceEvaluer(itemsDexa,start_point, start_dis+100, end_dis,DGI, type_de_bien);
 }
 export function extendDistanceFiltrer(itemsDexa:any, start_point:any, start_dis:number, end_dis:number, type_de_bien:string,type_de_ref:string[], date_de_ref:string[]){
-    console.log("itemsDexa", itemsDexa)
     var query = function(element) {
         var lat = getLat(element.Latitude_Longitude);
         var lng = getLng(element.Latitude_Longitude);
@@ -115,6 +114,7 @@ export function extendDistanceFiltrer(itemsDexa:any, start_point:any, start_dis:
         //console.log("element =>",element)
         var dis = haversine(start_point, end_point);
         var date = new Date(element.Date_x0020_de_x0020_la_x0020_r_x).getFullYear().toString()
+        console.log("type_de_ref.indexOf(element.Type_x0020_de_x0020_R_x00e9_f_x0)!=-1", type_de_ref.indexOf(element.Type_x0020_de_x0020_R_x00e9_f_x0)!=-1)
         return element.is_deleted ==="Non" && element.Type_x0020_de_x0020_bien[0] === type_de_bien && type_de_ref.indexOf(element.Type_x0020_de_x0020_R_x00e9_f_x0)!=-1 && date_de_ref.indexOf(date)!=-1 && dis <= start_dis/1000;
     };
     

@@ -83,7 +83,7 @@
     .HideTextArea {
         display: none;
     }
-    .marker {
+    .markerVenteLocaliser {
         position: absolute;
         top: 50%;
         left: 50%;
@@ -93,19 +93,52 @@
         border-radius: 100%;
         user-select: none;
         transform: translate(-50%, -50%);
-        background-color: rgb(91, 91, 218);
+        background-color: rgb(58, 58, 240);
         cursor: 'pointer';
         &:hover {
             z-index: 500;
         }
     }
-    .markerNonLocaliser {
+    .markerVenteNonLocaliser {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 18px;
+        height: 18px;
+        border: 2px solid rgb(0, 0, 0);
+        border-radius: 100%;
+        user-select: none;
+        transform: translate(-50%, -50%);
+        background-color: rgb(58, 58, 240);
+        position: absolute;
+        cursor: 'pointer';
+        &:hover {
+            z-index: 500;
+        }
+    }
+    .markerLocationLocaliser {
         position: absolute;
         top: 50%;
         left: 50%;
         width: 18px;
         height: 18px;
         border: 2px solid #fff;
+        border-radius: 100%;
+        user-select: none;
+        transform: translate(-50%, -50%);
+        background-color: rgb(255, 253, 113);
+        cursor: 'pointer';
+        &:hover {
+            z-index: 500;
+        }
+    }
+    .markerLocationNonLocaliser {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 18px;
+        height: 18px;
+        border: 2px solid rgb(0, 0, 0);
         border-radius: 100%;
         user-select: none;
         transform: translate(-50%, -50%);
@@ -359,9 +392,6 @@ table {
     margin: 50px auto;
     font-size: 14px;
 }
-
-
-/* Zebra striping */
 
 tr:nth-of-type(odd) {
     background: #eee;
