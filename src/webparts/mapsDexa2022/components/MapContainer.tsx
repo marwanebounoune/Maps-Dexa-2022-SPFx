@@ -128,7 +128,7 @@ export default function MapContainer(props:IMapContainerProps){
     return  (<div className={styles.popupMarker}>
         <div className={styles.CloseDiv} onClick={()=> setPopupInfo(false)}>X</div>
         <div className={styles.arrowPopUp}></div>
-        <div><span className={styles.spanInfo}>Type de bien:</span><span>{popupInfo.Type_x0020_de_x0020_bien[0]}</span></div>
+        <div><span className={styles.spanInfo}>Type de bien:</span><span>{popupInfo.Type_x0020_de_x0020_bien}</span></div>
         {popupInfo.Surface_x0020_terrain?<div><span className={styles.spanInfo}>Surface Terrain:</span><span>{popupInfo.Surface_x0020_terrain} m²</span></div>:<></>}
         {popupInfo.Surface_x0020_construite?<div><span className={styles.spanInfo}>Surface Construite:</span><span>{popupInfo.Surface_x0020_construite} m²</span></div>:<></>}
         {popupInfo.Surface_x0020_pond_x00e9_r_x00e9?<div><span className={styles.spanInfo}>Surface Pondéré:</span><span>{popupInfo.Surface_x0020_pond_x00e9_r_x00e9} m²</span></div>:<></>}
@@ -147,7 +147,7 @@ export default function MapContainer(props:IMapContainerProps){
     return <div className={styles.popupMarker}>
       <div className={styles.CloseDiv} onClick={()=> setPopupInfoRapport(false)}>X</div>
       <div className={styles.arrowPopUp}></div>
-      <span className={styles.spanInfo}>Type de bien: </span>{popupInfoRapport.Type_x0020_de_x0020_bien[0]}<br/>
+      <span className={styles.spanInfo}>Type de bien: </span>{popupInfoRapport.Type_x0020_de_x0020_bien}<br/>
       {popupInfoRapport.Surface_x0020_pond_x00e9_r_x00e9?<><span className={styles.spanInfo}>Surface pondéré: </span>{popupInfoRapport.Surface_x0020_pond_x00e9_r_x00e9} Dhs/m2<br/></>:<></>}
       {popupInfoRapport.Surface_x0020_construite?<><span className={styles.spanInfo}>Surface construite: </span>{popupInfoRapport.Surface_x0020_construite} Dhs/m2<br/></>:<></>}
       {popupInfoRapport.Surface_x0020_terrain?<><span className={styles.spanInfo}>Surface terrain: </span>{popupInfoRapport.Surface_x0020_terrain} Dhs/m2<br/></>:<></>}

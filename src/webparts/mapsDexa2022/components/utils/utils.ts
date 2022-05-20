@@ -82,14 +82,14 @@ export function extendDistanceEvaluer(itemsDexa:any, start_point:any, start_dis:
             longitude: lng
         };
         var dis = haversine(start_point, end_point);
-        var type_de_bien = element.Type_x0020_de_x0020_bien[0];
+        var type_de_bien = element.Type_x0020_de_x0020_bien;
         var el_prix:number = null;
         if(type_de_bien === "Résidentiel" || type_de_bien === "Commercial" || type_de_bien === "Professionnel")
             el_prix = parseInt(element.Prix_x0020_unitaire_x0020_pond_x);
         else
             el_prix = parseInt(element.Prix_x0020_unitaire_x0020_terrai);
         var _is_valide_PU = is_valide_PU(parseInt(DGI.Prix_unitaire),el_prix);
-        var el =  element.Type_x0020_de_x0020_bien[0] === type_de_bien && element.Type_x0020_de_x0020_R_x00e9_f_x0 === "Vente" && dis <= start_dis/1000 && _is_valide_PU;
+        var el =  element.Type_x0020_de_x0020_bien === type_de_bien && element.Type_x0020_de_x0020_R_x00e9_f_x0 === "Vente" && dis <= start_dis/1000 && _is_valide_PU;
         if (el){
             array_prix_dexa.push(el_prix);
             return el;
@@ -112,7 +112,7 @@ export function extendDistanceFiltrer(itemsDexa:any, start_point:any, start_dis:
             };
             var dis = haversine(start_point, end_point);
             var date = new Date(element.Date_x0020_de_x0020_la_x0020_r_x).getFullYear().toString()
-            return element.is_deleted ==="Non" && (element.Type_x0020_de_x0020_bien[0] === "Villa" || element.Type_x0020_de_x0020_bien[0] === "Terrain Villa") && type_de_ref.indexOf(element.Type_x0020_de_x0020_R_x00e9_f_x0)!=-1 && date_de_ref.indexOf(date)!=-1 && dis <= start_dis/1000;
+            return element.is_deleted ==="Non" && (element.Type_x0020_de_x0020_bien === "Villa" || element.Type_x0020_de_x0020_bien === "Terrain Villa") && type_de_ref.indexOf(element.Type_x0020_de_x0020_R_x00e9_f_x0)!=-1 && date_de_ref.indexOf(date)!=-1 && dis <= start_dis/1000;
         };
     else if (type_de_bien === "Terrain")
         var query = function(element) {
@@ -124,7 +124,8 @@ export function extendDistanceFiltrer(itemsDexa:any, start_point:any, start_dis:
             };
             var dis = haversine(start_point, end_point);
             var date = new Date(element.Date_x0020_de_x0020_la_x0020_r_x).getFullYear().toString()
-            return element.is_deleted ==="Non" && (element.Type_x0020_de_x0020_bien[0] === "Terrain Agricole" || element.Type_x0020_de_x0020_bien[0] === "Terrain Construit" || element.Type_x0020_de_x0020_bien[0] === "Terrain Urbain" || element.Type_x0020_de_x0020_bien[0] === "Terrain Villa") && type_de_ref.indexOf(element.Type_x0020_de_x0020_R_x00e9_f_x0)!=-1 && date_de_ref.indexOf(date)!=-1 && dis <= start_dis/1000;
+            console.log("Type de bien: ", element.Type_x0020_de_x0020_bien)
+            return element.is_deleted ==="Non" && (element.Type_x0020_de_x0020_bien === "Terrain Agricole" || element.Type_x0020_de_x0020_bien === "Terrain Construit" || element.Type_x0020_de_x0020_bien === "Terrain Urbain" || element.Type_x0020_de_x0020_bien === "Terrain Villa") && type_de_ref.indexOf(element.Type_x0020_de_x0020_R_x00e9_f_x0)!=-1 && date_de_ref.indexOf(date)!=-1 && dis <= start_dis/1000;
         };
     else
         var query = function(element) {
@@ -136,7 +137,7 @@ export function extendDistanceFiltrer(itemsDexa:any, start_point:any, start_dis:
             };
             var dis = haversine(start_point, end_point);
             var date = new Date(element.Date_x0020_de_x0020_la_x0020_r_x).getFullYear().toString()
-            return element.is_deleted ==="Non" && element.Type_x0020_de_x0020_bien[0] === type_de_bien && type_de_ref.indexOf(element.Type_x0020_de_x0020_R_x00e9_f_x0)!=-1 && date_de_ref.indexOf(date)!=-1 && dis <= start_dis/1000;
+            return element.is_deleted ==="Non" && element.Type_x0020_de_x0020_bien === type_de_bien && type_de_ref.indexOf(element.Type_x0020_de_x0020_R_x00e9_f_x0)!=-1 && date_de_ref.indexOf(date)!=-1 && dis <= start_dis/1000;
 
         };
     const filterd_list_dexa = itemsDexa.filter(query);
@@ -177,7 +178,7 @@ export function extendDistanceFiltrerRapport(rapport_classic:any,grand_rapport:a
                 longitude: lng
             };
             var dis = haversine(start_point, end_point);
-            var element_type_de_bien = element.Type_x0020_de_x0020_bien[0];
+            var element_type_de_bien = element.Type_x0020_de_x0020_bien;
             if(element_type_de_bien!=null){
                 isIncluded =  type_de_bien.some(value => element_type_de_bien.includes(value));
             }
